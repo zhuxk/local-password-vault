@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>密码管理 - 本地密码匣</title>
+  <link rel="stylesheet" href="manager.css">
+</head>
+<body>
+  <header class="hero">
+    <div>
+      <p class="eyebrow">LOCAL PASSWORD VAULT</p>
+      <h1>密码管理</h1>
+      <p class="subtitle">数据只以加密形式保存在当前浏览器中。</p>
+    </div>
+    <button id="lock-button" class="quiet hidden" type="button">立即锁定</button>
+  </header>
+
+  <main>
+    <p id="message" class="message hidden" role="status"></p>
+
+    <section id="setup-view" class="card narrow hidden">
+      <h2>创建本地密码库</h2>
+      <p>主密码至少 8 个字符，不会被保存且无法找回。</p>
+      <form id="setup-form" class="form-grid">
+        <label>主密码<input id="setup-password" type="password" minlength="8" autocomplete="new-password" required></label>
+        <label>确认主密码<input id="setup-confirm" type="password" minlength="8" autocomplete="new-password" required></label>
+        <button class="primary" type="submit">创建密码库</button>
+      </form>
+      <div class="divider"><span>或</span></div>
+      <label class="file-button full-button">从加密备份恢复<input class="backup-input" type="file" accept=".json,application/json"></label>
+    </section>
+
+    <section id="unlock-view" class="card narrow hidden">
+      <h2>密码库已锁定</h2>
+      <form id="unlock-form" class="form-grid">
+        <label>主密码<input id="unlock-password" type="password" autocomplete="current-password" required></label>
+        <button class="primary" type="submit">解锁</button>
+      </form>
+      <div class="recovery-actions">
+        <label class="file-button">恢复加密备份<input class="backup-input" type="file" accept=".json,application/json"></label>
+        <button id="forgot-delete-button" class="danger" type="button">忘记主密码，删除密码库</button>
+      </div>
+    </section>
+
+    <section id="vault-view" class="hidden">
+      <div class="toolbar card">
+        <input id="search-input" type="search" placeholder="搜索域名或用户名…" aria-label="搜索密码">
+        <select id="sort-select" aria-label="账号排序方式">
+          <option value="site">按网站排序</option>
+          <option value="updated">最近修改优先</option>
+          <option value="username">按用户名排序</option>
+        </select>
+        <button id="add-button" class="primary" type="button">添加账号</button>
+        <label class="file-button">导入浏览器 CSV<input id="csv-input" type="file" accept=".csv,text/csv"></label>
+        <button id="backup-button" class="quiet" type="button">导出加密备份</button>
+        <label class="file-button">恢复加密备份<input class="backup-input" type="file" accept=".json,application/json"></label>
+      </div>
+
+      <div class="import-note">
+        Chrome/Edge 不允许插件直接读取已保存密码。请先在浏览器密码管理器中导出 CSV，再在这里导入；导入后请立即删除明文 CSV。
+      </div>
+
+      <div id="groups" class="groups"></div>
+      <div id="empty-state" class="card empty hidden">
+        <h2>还没有保存账号</h2>
+        <p>可以手动添加，或导入 Chrome、Edge 导出的密码 CSV。</p>
+      </div>
+
+      <section class="card management-card">
+        <div class="section-heading">
+          <div><h2>回收站</h2><p>删除的账号可恢复；永久删除后无法找回。</p></div>
+          <button id="empty-trash-button" class="danger hidden" type="button">清空回收站</button>
+        </div>
+        <div id="trash-list" class="trash-list"></div>
+        <p id="trash-empty" class="muted">回收站为空。</p>
+      </section>
+
+      <section class="card management-card">
+        <div class="section-heading"><div><h2>安全设置</h2><p>闲置计时会在每次使用扩展时重新开始。</p></div></div>
+        <div class="settings-grid">
+          <label>闲置后自动锁定
+            <select id="auto-lock-select">
+              <option value="5">5 分钟</option>
+              <option value="15">15 分钟</option>
+              <option value="30">30 分钟</option>
+              <option value="60">60 分钟</option>
+            </select>
+          </label>
+          <button id="show-change-password" class="quiet" type="button">修改主密码</button>
+          <button id="delete-vault-button" class="danger" type="button">删除整个密码库</button>
+        </div>
+        <form id="generator-settings-form" class="generator-settings">
+          <div>
+            <h3>密码生成规则</h3>
+            <p>自动排除容易混淆的字符，并保证每种已选字符至少出现一次。</p>
+          </div>
+          <label>长度<input id="generator-length" type="number" min="8" max="64" required></label>
+          <label class="check-row"><input id="generator-uppercase" type="checkbox"> 大写字母</label>
+          <label class="check-row"><input id="generator-lowercase" type="checkbox"> 小写字母</label>
+          <label class="check-row"><input id="generator-numbers" type="checkbox"> 数字</label>
+          <label class="check-row"><input id="generator-symbols" type="checkbox"> 符号</label>
+          <button class="quiet" type="submit">保存生成规则</button>
+        </form>
+        <form id="change-password-form" class="form-grid inline-form hidden">
+          <label>当前主密码<input id="current-password" type="password" autocomplete="current-password" required></label>
+          <label>新主密码<input id="new-password" type="password" minlength="8" autocomplete="new-password" required></label>
+          <label>确认新主密码<input id="new-password-confirm" type="password" minlength="8" autocomplete="new-password" required></label>
+          <div class="dialog-actions"><button class="primary" type="submit">确认修改</button></div>
+        </form>
+      </section>
+    </section>
+  </main>
+
+  <dialog id="entry-dialog">
+    <form id="entry-form" method="dialog" class="dialog-form">
+      <div class="dialog-title">
+        <h2 id="dialog-heading">添加账号</h2>
+        <button id="dialog-close" class="close" type="button" aria-label="关闭">×</button>
+      </div>
+      <input id="entry-id" type="hidden">
+      <label>网站名称<input id="entry-name" type="text" maxlength="200" placeholder="例如：公司管理后台"></label>
+      <label>网址<input id="entry-url" type="text" placeholder="https://example.com" required></label>
+      <label>用户名<input id="entry-username" type="text" autocomplete="off" required></label>
+      <label>密码
+        <span class="password-row">
+          <input id="entry-password" type="password" autocomplete="new-password" required>
+          <button id="toggle-password-button" class="password-toggle" type="button" aria-label="显示密码" title="显示密码">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"></path>
+              <circle cx="12" cy="12" r="2.8"></circle>
+            </svg>
+          </button>
+          <button id="generate-button" class="quiet" type="button">生成密码</button>
+        </span>
+      </label>
+      <section id="password-history-section" class="password-history hidden">
+        <div>
+          <h3>最近使用过的密码</h3>
+          <p>最多保留最近 3 次旧密码，均加密存放在密码库中。</p>
+        </div>
+        <div id="password-history-list" class="password-history-list"></div>
+      </section>
+      <div class="dialog-actions">
+        <button id="delete-button" class="danger hidden" type="button">删除</button>
+        <span class="spacer"></span>
+        <button id="cancel-button" class="quiet" type="button">取消</button>
+        <button class="primary" type="submit">保存</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="restore-dialog">
+    <form id="restore-form" method="dialog" class="dialog-form">
+      <div class="dialog-title"><h2>恢复加密备份</h2><button id="restore-close" class="close" type="button" aria-label="关闭">×</button></div>
+      <p class="dialog-note">请输入这份备份导出时使用的主密码。恢复前会完整校验备份；已有密码库将被替换。</p>
+      <label>备份主密码<input id="restore-password" type="password" autocomplete="current-password" required></label>
+      <label id="replace-confirm-row" class="check-row"><input id="replace-confirm" type="checkbox"> 我确认用备份替换当前密码库</label>
+      <div class="dialog-actions"><span class="spacer"></span><button id="restore-cancel" class="quiet" type="button">取消</button><button class="primary" type="submit">校验并恢复</button></div>
+    </form>
+  </dialog>
+
+  <script src="shared/password.js"></script>
+  <script src="manager.js"></script>
+</body>
+</html>

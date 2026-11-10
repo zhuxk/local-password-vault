@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>本地密码匣</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">本地密码匣</p>
+        <h1 id="page-title">正在读取…</h1>
+        <p id="site-address" class="site-address hidden"></p>
+      </div>
+      <button id="lock-button" class="icon-button hidden" type="button" title="锁定">锁定</button>
+    </header>
+
+    <p id="message" class="message hidden" role="status"></p>
+
+    <section id="setup-view" class="panel hidden">
+      <h2>创建密码库</h2>
+      <p class="hint">主密码不会被保存，也无法找回。请至少使用 8 个字符。</p>
+      <form id="setup-form" class="form-stack">
+        <label>主密码<input id="setup-password" type="password" minlength="8" autocomplete="new-password" required></label>
+        <label>确认主密码<input id="setup-confirm" type="password" minlength="8" autocomplete="new-password" required></label>
+        <button class="primary" type="submit">创建并解锁</button>
+      </form>
+    </section>
+
+    <section id="unlock-view" class="panel hidden">
+      <h2>密码库已锁定</h2>
+      <form id="unlock-form" class="form-stack">
+        <label>主密码<input id="unlock-password" type="password" autocomplete="current-password" autofocus required></label>
+        <button class="primary" type="submit">解锁</button>
+      </form>
+    </section>
+
+    <section id="vault-view" class="hidden">
+      <div id="unsupported" class="panel hidden">
+        <h2>当前页面不可用</h2>
+        <p class="hint">浏览器内部页面不允许扩展读取或填充密码。</p>
+      </div>
+      <div id="site-view" class="hidden">
+        <label class="fill-mode-control">本网站填充方式
+          <select id="fill-mode">
+            <option value="auto">自动填充</option>
+            <option value="click">仅点击钥匙后填充</option>
+            <option value="disabled">在本网站禁用</option>
+          </select>
+        </label>
+        <div id="account-list" class="account-list"></div>
+        <p id="empty-state" class="empty hidden">当前站点还没有保存账号。</p>
+        <button id="show-add-button" class="secondary full" type="button">添加当前站点账号</button>
+
+        <form id="entry-form" class="panel form-stack hidden">
+          <h2>添加账号</h2>
+          <label>网址<input id="entry-url" type="url" required></label>
+          <label>用户名<input id="entry-username" type="text" autocomplete="off" required></label>
+          <label>密码
+            <span class="password-row">
+              <input id="entry-password" type="password" autocomplete="new-password" required>
+              <button id="generate-button" class="small-button" type="button">生成</button>
+            </span>
+          </label>
+          <div class="button-row">
+            <button id="cancel-add-button" class="ghost" type="button">取消</button>
+            <button class="primary" type="submit">保存</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <footer>
+      <button id="manager-button" class="link-button" type="button">管理全部密码与导入</button>
+    </footer>
+  </main>
+  <script src="shared/password.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

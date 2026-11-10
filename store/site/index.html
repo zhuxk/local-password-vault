@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>隐私政策 — 本地密码匣</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 40px 24px 72px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+                 "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+    font-size: 16px;
+    line-height: 1.8;
+    color: #1b2520;
+    background: radial-gradient(circle at 15% 0%, #e9f3ea 0, transparent 38%), #f6f7f3;
+  }
+  main {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 40px 44px;
+    border: 1px solid #dfe6e0;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 18px 48px rgba(31, 62, 41, .08);
+  }
+  h1 { margin: 0 0 8px; font-size: 30px; line-height: 1.3; }
+  h2 { margin: 34px 0 10px; padding-bottom: 8px; font-size: 20px; border-bottom: 1px solid #e6ece7; }
+  h3 { margin: 24px 0 8px; font-size: 17px; }
+  p { margin: 12px 0; }
+  ul { margin: 12px 0; padding-left: 24px; }
+  li { margin: 6px 0; }
+  code {
+    padding: 2px 5px;
+    border-radius: 5px;
+    background: #eef4ef;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 13px;
+  }
+  table { width: 100%; margin: 16px 0; border-collapse: collapse; font-size: 14px; }
+  th, td { padding: 10px 12px; border: 1px solid #dfe6e0; text-align: left; vertical-align: top; }
+  th { background: #f0f6f1; font-weight: 700; }
+  hr { margin: 32px 0; border: 0; border-top: 1px solid #e6ece7; }
+  footer { margin-top: 36px; font-size: 13px; color: #6f7c73; }
+  @media (max-width: 640px) {
+    body { padding: 18px 12px 40px; }
+    main { padding: 26px 20px; }
+  }
+</style>
+</head>
+<body>
+<main>
+<h1>隐私政策 — 本地密码匣</h1>
+
+<p><strong>最后更新：2026 年 11 月 10 日</strong></p>
+
+<p>本政策说明「本地密码匣」浏览器扩展（适用于 Google Chrome 与 Microsoft Edge，以下简称&quot;本扩展&quot;）如何处理用户数据。</p>
+
+<p>本扩展的核心原则是：<strong>所有数据只保存在用户自己的浏览器中，不会发送到任何服务器。</strong></p>
+
+<h2>一、我们收集哪些数据</h2>
+
+<p>本扩展<strong>不收集、不上传、不共享</strong>任何用户数据。本扩展没有自己的服务器，没有账号系统，不包含任何统计、埋点、广告或错误上报代码。</p>
+
+<p>具体而言：</p>
+
+<table><thead><tr>
+<th>数据类型</th><th>是否离开设备</th><th>说明</th>
+</tr></thead><tbody>
+<tr><td>网站地址、用户名、密码</td><td>否</td><td>保存在浏览器本地存储中，并以 AES-256-GCM 密文形式存放</td></tr>
+<tr><td>主密码</td><td>否</td><td>仅在内存中用于派生密钥，从不被保存，也无法被找回</td></tr>
+<tr><td>网站标题、域名分组</td><td>否</td><td>用于在管理页中辨认网站</td></tr>
+<tr><td>填充方式偏好、默认账号设置</td><td>否</td><td>保存在浏览器本地存储中</td></tr>
+<tr><td>浏览历史、书签、Cookie</td><td>否</td><td>本扩展不读取也不存储这些数据</td></tr>
+</tbody></table>
+
+<p>需要说明的是：本扩展会在你访问的网页中<strong>读取登录表单的输入框</strong>，以识别用户名与密码框并完成填充。这属于填充功能的必要行为，读取到的内容仅在浏览器内存中处理，用于填充当前页面或保存到你主动确认的密码库条目。</p>
+
+<h2>二、数据存储在哪里</h2>
+
+<ul>
+<li><strong>密码库</strong>：保存在浏览器的 <code>chrome.storage.local</code> 中。整个密码库使用 AES-256-GCM 加密，密钥由你的主密码通过 PBKDF2-SHA256（310,000 次迭代）派生。密钥只存在于内存中，浏览器关闭或自动锁定后即被清除。</li>
+<li><strong>会话数据</strong>：解锁状态、待保存的登录信息等临时数据保存在浏览器的 <code>chrome.storage.session</code> 中，仅存在于当前浏览器会话，关闭浏览器后自动清除，且不会写入磁盘。</li>
+<li><strong>备份文件</strong>：只有在你主动点击&quot;导出加密备份&quot;时，才会生成一个文件。该文件中的密码库仍是 AES-256-GCM 密文，需要主密码才能解密。</li>
+</ul>
+
+<h2>三、数据如何传输</h2>
+
+<p><strong>本扩展不进行任何网络传输。</strong> 扩展代码中不包含 <code>fetch</code>、<code>XMLHttpRequest</code> 或其他发起网络请求的调用，也不加载任何远程脚本。Public Suffix List（用于正确识别网站根域名）已随扩展打包在本地。</p>
+
+<p>唯一的例外是<strong>你主动复制</strong>的账号或密码：这些内容会写入系统剪贴板，这属于你明确触发的操作。</p>
+
+<h2>四、我们不做什么</h2>
+
+<p>本扩展不会：</p>
+
+<ul>
+<li>出售、出租或以其他方式转让你的任何数据；</li>
+<li>将你的数据用于广告投放、信用评估或任何与本扩展核心功能无关的目的；</li>
+<li>允许第三方（包括我们）访问、读取或人工查看你的密码库内容；</li>
+<li>通过远程代码更新自身——所有可执行代码都包含在扩展包内。</li>
+</ul>
+
+<h2>五、第三方服务</h2>
+
+<p>本扩展<strong>不使用任何第三方服务</strong>，包括但不限于分析服务、错误追踪服务、云存储或广告网络。</p>
+
+<h2>六、你的控制权</h2>
+
+<p>你随时可以完全掌控自己的数据：</p>
+
+<ul>
+<li><strong>查看</strong>：在管理页中查看所有已保存的账号和密码；</li>
+<li><strong>修改</strong>：编辑账号、更改主密码；</li>
+<li><strong>导出</strong>：导出加密备份文件用于迁移或灾难恢复；</li>
+<li><strong>删除</strong>：删除单个账号（会先进入回收站）、清空回收站，或删除整个密码库（管理页 → 安全设置 → 删除整个密码库）；</li>
+<li><strong>卸载</strong>：卸载扩展会一并删除扩展在浏览器中保存的全部数据。</li>
+</ul>
+
+<h2>七、忘记主密码怎么办</h2>
+
+<p>主密码不会被保存，也没有找回途径。如果你忘记了主密码，扩展无法解密你的密码库。你只能删除该密码库并重新创建，或使用一份你仍然知道主密码的加密备份来恢复。</p>
+
+<h2>八、儿童隐私</h2>
+
+<p>本扩展不收集任何用户数据，因此也不会收集儿童的个人信息。</p>
+
+<h2>九、政策变更</h2>
+
+<p>如果本扩展的处理数据方式发生变化，我们会在本页面更新&quot;最后更新&quot;日期，并在扩展更新说明中注明。任何涉及数据处理方式的变更，都会在随后的扩展版本中同步更新隐私政策与商店的数据披露说明。</p>
+
+<h2>十、联系我们</h2>
+
+<p>如对本隐私政策或扩展有任何疑问，请通过扩展商店商品页面的支持邮箱与我们联系。</p>
+
+<hr>
+<footer>本地密码匣 · 数据仅保存在你的浏览器中</footer>
+</main>
+</body>
+</html>
