@@ -57,23 +57,23 @@ https://zhuxk.github.io/local-password-vault/
 
 已通过 GitHub Pages 上线：仓库 [`zhuxk/local-password-vault`](https://github.com/zhuxk/local-password-vault) 的 `docs/` 目录即站点根，源文件由 `store/PRIVACY.md` 经 `tools/make_privacy_page.py` 生成。未登录可直接访问并返回 200。
 
+部署方式为 **GitHub Actions**（`.github/workflows/pages.yml`）：push 到 `main` 且 `docs/` 有变动时自动构建并发布。
+
 页面样式全部内联（无外部 CSS/字体请求），任意静态托管都能直接显示。
 
 **以后要改隐私政策时：**
 
 1. 改 `store/PRIVACY.md`
 2. `python3 tools/make_privacy_page.py`（同时更新 `store/privacy.html` 和 `docs/index.html`）
-3. `git push` → GitHub Pages 自动重新构建，约 1–2 分钟生效
+3. `git push` → Actions 自动重新部署，约 1–2 分钟生效
 
 **换用其他托管（可选）：** `store/privacy.html` 是完全独立的单文件，直接拖到 Cloudflare Pages / Netlify Drop 即可，无需构建。
 
 <details>
 <summary>手动配置 GitHub Pages 的步骤（备用）</summary>
 
-1. 新建一个仓库（Public 或 Private 都可以，Private 需要 GitHub Pro 才能开 Pages）
-2. 建一个 `docs/` 目录，把 `index.html` 放进去
-3. 仓库 → **Settings** → 左侧 **Pages** → Source 选 `main` 分支 / `docs` 目录 → Save
-4. 等 1–2 分钟，页面顶部显示 "Your site is live at https://xxx.github.io/repo/"
+1. 仓库 → **Settings** → 左侧 **Pages** → Build and deployment → Source 选 **GitHub Actions**
+2. 或者选 `main` 分支 / `docs` 目录（legacy 模式）。但该仓库用 legacy 模式构建连续失败，实际采用的是 Actions 方式。
 
 > 注意：Pages 的 `source.path` 只接受 `/` 或 `/docs`，不能填其他子目录。
 </details>
