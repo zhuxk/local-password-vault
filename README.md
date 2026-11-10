@@ -59,6 +59,11 @@ bash tools/package.sh --edge        # 打包出商店可上传的 zip
 
 `store/` 目录存放图标、截图、隐私政策与商店文案；`store/SUBMIT.md` 是完整的发布流程，`store/LISTING.md` 包含两个商店需要填写的每一项内容与审核备注。
 
+隐私政策已托管在 GitHub Pages：<https://zhuxk.github.io/local-password-vault/>
+（源文件 `store/PRIVACY.md`，改完执行 `python3 tools/make_privacy_page.py` 后 `git push` 即自动更新。）
+
+仓库地址：<https://github.com/zhuxk/local-password-vault>
+
 ## 登录与保存
 
 - 密码库已解锁并且当前站点只有一个账号时，登录页会自动填充。

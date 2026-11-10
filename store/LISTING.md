@@ -57,9 +57,11 @@
 
 #### 隐私政策 URL
 
-> ⬜ `https://<你的域名>/privacy.html`
+> ✅ `https://zhuxk.github.io/local-password-vault/`
 
-（把 `store/privacy.html` 部署到 GitHub Pages / Cloudflare Pages / Netlify 即可。URL 必须公开可访问、不需要登录、返回 200。）
+（已通过 GitHub Pages 上线，仓库 `zhuxk/local-password-vault` 的 `docs/` 目录即站点根。未登录可直接访问并返回 200。）
+
+> 备选：`https://zhuxk.github.io/local-password-vault/` 与 `https://zhuxk.github.io/local-password-vault/index.html` 等价。
 
 ### 1.3 商家信息（Store listing tab）
 
@@ -162,7 +164,7 @@ example.com 与 www.example.com 视为同一站点，admin.example.com 等其他
 | --- | --- |
 | 类别 | Productivity |
 | 是否收集个人信息 | 是（见下方说明） |
-| 隐私政策 URL | ⬜ `https://<你的域名>/privacy.html` |
+| 隐私政策 URL | ✅ `https://zhuxk.github.io/local-password-vault/` |
 
 ### 2.5 隐私信息（Privacy）
 

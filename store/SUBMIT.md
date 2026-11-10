@@ -31,9 +31,11 @@ dist/local-password-vault-0.4.0-edge.zip     上传 Microsoft Edge Add-ons
 manifest.json            扩展清单（图标、权限、最低 Chrome 版本）
 icons/                   扩展图标（16 / 48 / 128）
 src/                     扩展源码
+docs/
+  index.html             隐私政策网页（GitHub Pages 发布目录，与 store/privacy.html 同源生成）
 store/
   PRIVACY.md             隐私政策（Markdown 源文件）
-  privacy.html           隐私政策（可直接托管的网页）
+  privacy.html           隐私政策（独立单文件网页，可拖到任意静态托管）
   LISTING.md             两个商店的文案与填写清单  ← 先读这个
   icon-128.png           Chrome 商店列表图
   edge-logo-300.png      Edge 商店 Logo
@@ -45,26 +47,36 @@ tools/                   素材生成与打包脚本（不包含在发布包内�
 
 ## 三、发布前必须自己做的三件事
 
-### 1. 托管隐私政策页面
+### 1. 托管隐私政策页面 ✅ 已完成
 
-`store/privacy.html` 需要一个公开可访问的 URL。免费方案：
+**隐私政策地址（直接复制到商店后台）：**
 
-- **GitHub Pages**：把仓库推到 GitHub，在 Settings → Pages 选择分支根目录，地址形如 `https://<用户名>.github.io/<仓库名>/privacy.html`
-- **Cloudflare Pages / Netlify**：直接拖拽 `store/privacy.html` 即可
+```
+https://zhuxk.github.io/local-password-vault/
+```
 
-确认这个 URL 在**未登录**状态下浏览器能直接打开并返回 200。商店审核会实际访问它。
+已通过 GitHub Pages 上线：仓库 [`zhuxk/local-password-vault`](https://github.com/zhuxk/local-password-vault) 的 `docs/` 目录即站点根，源文件由 `store/PRIVACY.md` 经 `tools/make_privacy_page.py` 生成。未登录可直接访问并返回 200。
 
-> 注意：`store/privacy.html` 里的样式是内联的（无外部 CSS/字体请求），拖到任何静态托管上都能直接显示，不需要额外构建。
+页面样式全部内联（无外部 CSS/字体请求），任意静态托管都能直接显示。
 
-**GitHub Pages 具体操作：**
+**以后要改隐私政策时：**
+
+1. 改 `store/PRIVACY.md`
+2. `python3 tools/make_privacy_page.py`（同时更新 `store/privacy.html` 和 `docs/index.html`）
+3. `git push` → GitHub Pages 自动重新构建，约 1–2 分钟生效
+
+**换用其他托管（可选）：** `store/privacy.html` 是完全独立的单文件，直接拖到 Cloudflare Pages / Netlify Drop 即可，无需构建。
+
+<details>
+<summary>手动配置 GitHub Pages 的步骤（备用）</summary>
 
 1. 新建一个仓库（Public 或 Private 都可以，Private 需要 GitHub Pro 才能开 Pages）
-2. 把 `store/privacy.html` 放到仓库根目录，或建一个 `docs/` 目录把它放进去
-3. 仓库 → **Settings** → 左侧 **Pages** → Source 选 `main` 分支 / `root` 目录（若文件在 `docs/` 则选 `docs/`）→ Save
+2. 建一个 `docs/` 目录，把 `index.html` 放进去
+3. 仓库 → **Settings** → 左侧 **Pages** → Source 选 `main` 分支 / `docs` 目录 → Save
 4. 等 1–2 分钟，页面顶部显示 "Your site is live at https://xxx.github.io/repo/"
-5. 隐私政策地址 = `https://xxx.github.io/repo/privacy.html`（或 `/docs/privacy.html`）
 
-**更省事的替代**（不用碰 GitHub）：Netlify Drop —— 打开 <https://app.netlify.com/drop>，把 `store/privacy.html` 所在的文件夹直接拖进去，立刻得到一个公开 URL。
+> 注意：Pages 的 `source.path` 只接受 `/` 或 `/docs`，不能填其他子目录。
+</details>
 
 ### 2. 注册开发者账号
 
