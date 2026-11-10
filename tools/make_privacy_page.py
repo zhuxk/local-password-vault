@@ -17,8 +17,9 @@ import re
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SOURCE = os.path.join(ROOT, "store", "PRIVACY.md")
 TARGET = os.path.join(ROOT, "store", "privacy.html")
-# 可直接部署的站点目录：index.html 为根入口，方便整体发布到任意静态托管
-SITE_DIR = os.path.join(ROOT, "store", "site")
+# GitHub Pages 的发布目录：Pages 的 source.path 只接受 / 或 /docs，
+# 所以固定放在仓库根的 docs/ 下，index.html 即站点根入口。
+SITE_DIR = os.path.join(ROOT, "docs")
 SITE_TARGET = os.path.join(SITE_DIR, "index.html")
 
 
@@ -189,8 +190,8 @@ def main() -> None:
         handle.write(PAGE.format(content=body))
 
     print(f"已生成 {os.path.relpath(TARGET, ROOT)}  ({os.path.getsize(TARGET)} 字节)")
-    print(f"已生成 {os.path.relpath(SITE_TARGET, ROOT)}  (可整目录部署)")
-    print("托管方式：把 store/privacy.html 放到任意静态托管（GitHub Pages / Cloudflare Pages / Netlify）")
+    print(f"已生成 {os.path.relpath(SITE_TARGET, ROOT)}  (GitHub Pages 发布目录)")
+    print("托管方式：GitHub Pages 选 source.path=/docs；或直接把 store/privacy.html 拖到任意静态托管")
 
 
 if __name__ == "__main__":
