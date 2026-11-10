@@ -68,7 +68,9 @@ import json, sys
 path = sys.argv[1]
 with open(path, encoding="utf-8") as handle:
     manifest = json.load(handle)
-# Edge 不使用 Chrome 的自动更新地址
+# Edge 不使用 Chrome 的自动更新地址。
+# 注意：当前 manifest.json 本身不含 update_url（Chrome Web Store 会在上架时
+# 自动注入，无需打进包里），所以这一步在现阶段是空操作。
 manifest.pop("update_url", None)
 # 注意：manifest 的 description 在 Chrome 侧上限 132 字符，
 # 而 Edge 商店列表页的 Description 字段（250~10000 字符）
