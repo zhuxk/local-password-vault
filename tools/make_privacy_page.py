@@ -188,6 +188,9 @@ def main() -> None:
     os.makedirs(SITE_DIR, exist_ok=True)
     with open(SITE_TARGET, "w", encoding="utf-8") as handle:
         handle.write(PAGE.format(content=body))
+    # .nojekyll 让 GitHub Pages 跳过 Jekyll 处理，避免构建失败
+    with open(os.path.join(SITE_DIR, ".nojekyll"), "w", encoding="utf-8") as handle:
+        handle.write("")
 
     print(f"已生成 {os.path.relpath(TARGET, ROOT)}  ({os.path.getsize(TARGET)} 字节)")
     print(f"已生成 {os.path.relpath(SITE_TARGET, ROOT)}  (GitHub Pages 发布目录)")
